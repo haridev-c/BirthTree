@@ -5,9 +5,11 @@ import HomePage from "./pages/HomePage";
 import LayoutPage from "./pages/LayoutPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
+import axios from "axios";
 
 function App() {
-  const [count, setCount] = useState(0);
+  axios.defaults.baseURL = "http://localhost:7878/";
+  axios.defaults.withCredentials = true;
 
   return (
     <>

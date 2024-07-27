@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import zxcvbn from "zxcvbn";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import DatePicker from "../components/DatePicker";
 import PasswordMeter from "@/components/passwordMeter/PasswordMeter";
+
+import { useToast } from "@/components/ui/use-toast";
 
 function SignupPage() {
   const [dob, setDob] = useState();
@@ -14,6 +17,8 @@ function SignupPage() {
   const [password, setPassword] = useState();
   const [passScore, setPassScore] = useState(0);
   const [passFeedback, setPassFeedback] = useState("");
+
+  const { toast } = useToast();
 
   const checkPassStrength = (password) => {
     const result = zxcvbn(password);
@@ -28,12 +33,52 @@ function SignupPage() {
     return name && email && dob && password && passScore > 2;
   };
 
+  // Submit the form and handle errors
+  const submitForm = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await axios.post("/users/create", {
+        name,
+        email,
+        dob,
+        password,
+      });
+
+      console.log(data);
+
+      toast({
+        description: data.message,
+      });
+    } catch (error) {
+      console.log("Error in submitting form");
+      console.error(error);
+
+      if (error.response) {
+        toast({
+          description: error.response.data.message,
+          variant: "destructive",
+        });
+      } else if (error.request) {
+        console.error("No response received from server: ", error.request);
+        toast({
+          description: "No response from server. Please try again later",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "An unexpected error occured. Please try again later",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   return (
     <>
       <main className="flex flex-grow flex-col items-center justify-center p-2">
         {/* Center content */}
         <div className="flex w-full flex-col border border-black md:w-2/3 md:flex-row">
-          {/*  */}
+          {/* Welcome message */}
           <section className="flex flex-col items-center justify-center bg-[#272e3f] p-10 text-lg font-black md:w-1/2 md:text-4xl">
             <span className="text-white">Join the family!</span>
           </section>
@@ -108,7 +153,11 @@ function SignupPage() {
                 />
               </div>
 
-              <Button disabled={!isFormValid()} className={`my-6 w-full`}>
+              <Button
+                disabled={!isFormValid()}
+                onClick={submitForm}
+                className={`my-6 w-full`}
+              >
                 Register
               </Button>
             </form>
