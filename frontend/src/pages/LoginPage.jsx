@@ -10,11 +10,11 @@ function LoginPage() {
       <main className="flex flex-grow flex-col items-center justify-center p-2">
         {/* Login Form */}
         <div className="flex w-full flex-col border border-black md:w-2/3 md:flex-row">
-          <section className="flex flex-col items-center justify-center p-10 text-lg font-black md:w-1/2 md:text-4xl">
+          <section className="flex flex-col items-center justify-center bg-[#272e3f] p-10 text-lg font-black text-white md:w-1/2 md:text-4xl">
             Welcome Back
           </section>
-          <section className="bg-[#272e3f] p-10 md:w-1/2">
-            <p className="mb-2 text-3xl font-bold text-white">Login</p>
+          <section className="p-10 md:w-1/2">
+            <p className="mb-2 text-3xl font-bold">Login</p>
             <p className="my-6 text-sm text-[#999999]">
               Welcome back! Please login to your account
             </p>
@@ -28,6 +28,7 @@ function LoginPage() {
                   type="email"
                   id="email"
                   placeholder="Email"
+                  required
                 />
               </div>
 
@@ -40,15 +41,14 @@ function LoginPage() {
                   type="password"
                   id="password"
                   placeholder="Password"
+                  required
                 />
               </div>
-              <Button variant="outline" className="my-6 w-full">
-                Login
-              </Button>
+              <Button className="my-6 w-full">Login</Button>
             </form>
             <p>
               <span className="text-[#999999]">New User?</span>{" "}
-              <Link className="text-white" to={"/signup"}>
+              <Link className="" to={"/signup"}>
                 Sign up
               </Link>
             </p>
