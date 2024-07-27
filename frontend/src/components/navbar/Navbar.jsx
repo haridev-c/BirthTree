@@ -29,17 +29,20 @@ function Navbar() {
                     <AvatarImage src="" />
                     <AvatarFallback>
                       <svg
-                        fill="#000000"
-                        width="800px"
-                        height="800px"
-                        viewBox="0 -2.93 32.537 32.537"
                         xmlns="http://www.w3.org/2000/svg"
+                        width="24"
+                        height="24"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-circle-user-round"
                       >
-                        <g transform="translate(-481.391 -197.473)">
-                          <path d="M512.928,224.152a.991.991,0,0,1-.676-.264,21.817,21.817,0,0,0-29.2-.349,1,1,0,1,1-1.322-1.5,23.814,23.814,0,0,1,31.875.377,1,1,0,0,1-.677,1.736Z" />
-
-                          <path d="M498.191,199.473a7.949,7.949,0,1,1-7.949,7.95,7.959,7.959,0,0,1,7.949-7.95m0-2a9.949,9.949,0,1,0,9.95,9.95,9.949,9.949,0,0,0-9.95-9.95Z" />
-                        </g>
+                        <path d="M18 20a6 6 0 0 0-12 0" />
+                        <circle cx="12" cy="10" r="4" />
+                        <circle cx="12" cy="12" r="10" />
                       </svg>
                     </AvatarFallback>
                   </Avatar>
@@ -51,7 +54,12 @@ function Navbar() {
                     </Button>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Button variant="destructive">Logout</Button>
+                    <Button
+                      onClick={() => setIsLoggedIn(false)}
+                      variant="destructive"
+                    >
+                      Logout
+                    </Button>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
