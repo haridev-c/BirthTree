@@ -7,6 +7,10 @@ import DatePicker from "../components/DatePicker";
 
 function SignupPage() {
   const [dob, setDob] = useState();
+  const [name, setName] = useState();
+  const [email, setEmail] = useState();
+  const [password, setPassword] = useState();
+
   return (
     <>
       <main className="flex flex-grow flex-col items-center justify-center p-2">
@@ -33,6 +37,9 @@ function SignupPage() {
                   type="text"
                   id="name"
                   placeholder="Full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  required
                 />
               </div>
               <div>
@@ -44,6 +51,9 @@ function SignupPage() {
                   type="email"
                   id="email"
                   placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
                 />
               </div>
 
@@ -52,7 +62,13 @@ function SignupPage() {
                   Date of Birth
                 </Label>
                 <div className="my-2">
-                  <DatePicker date={dob} setDate={setDob} />
+                  {/* <DatePicker date={dob} setDate={setDob} /> */}
+                  <Input
+                    type="date"
+                    value={dob}
+                    onChange={(e) => setDob(e.target.value)}
+                    required
+                  />
                 </div>
               </div>
 
@@ -65,6 +81,8 @@ function SignupPage() {
                   type="password"
                   id="password"
                   placeholder="Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
 
@@ -75,7 +93,6 @@ function SignupPage() {
             <p>
               <span className="text-[#999999]">Existing User?</span>
               <Link className="text-white" to={"/login"}>
-                {" "}
                 Login
               </Link>
             </p>
