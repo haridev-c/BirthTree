@@ -1,10 +1,57 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React from "react";
-import { Link } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
+import axios from "axios";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const submitForm = async (e) => {
+    try {
+      e.preventDefault();
+      const { data } = await axios.post("/users/login", { email, password });
+      toast({
+        description: data.message,
+      });
+
+      if (data.success) {
+        
+        setTimeout(() => {
+          navigate("/");
+        }, 3000);
+      }
+    } catch (error) {
+      console.log("Error occured in submitForm() in LoginPage.jsx");
+      console.error(error);
+
+      // error handling
+      if (error.response) {
+        toast({
+          description: error.response.data.message,
+          variant: "destructive",
+        });
+      } else if (error.request) {
+        console.error("No response received from server: ", error.request);
+        toast({
+          description: "No response from server. Please try again later",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          description: "An unexpected error occured. Please try again later",
+          variant: "destructive",
+        });
+      }
+    }
+  };
+
   return (
     <>
       <main className="flex flex-grow flex-col items-center justify-center p-2">
@@ -29,6 +76,8 @@ function LoginPage() {
                   id="email"
                   placeholder="Email"
                   required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
@@ -42,9 +91,13 @@ function LoginPage() {
                   id="password"
                   placeholder="Password"
                   required
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
               </div>
-              <Button className="my-6 w-full">Login</Button>
+              <Button onClick={submitForm} className="my-6 w-full">
+                Login
+              </Button>
             </form>
             <p>
               <span className="text-[#999999]">New User?</span>{" "}

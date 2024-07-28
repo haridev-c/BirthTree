@@ -1,24 +1,25 @@
 import React, { useState } from "react";
 import zxcvbn from "zxcvbn";
 import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
 import DatePicker from "../components/DatePicker";
 import PasswordMeter from "@/components/passwordMeter/PasswordMeter";
 
 import { useToast } from "@/components/ui/use-toast";
 
 function SignupPage() {
-  const [dob, setDob] = useState();
-  const [name, setName] = useState();
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [dob, setDob] = useState(new Date());
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [passScore, setPassScore] = useState(0);
   const [passFeedback, setPassFeedback] = useState("");
 
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   const checkPassStrength = (password) => {
     const result = zxcvbn(password);
@@ -49,6 +50,12 @@ function SignupPage() {
       toast({
         description: data.message,
       });
+
+      if (data.success) {
+        setTimeout(() => {
+          navigate("/login");
+        }, 4000);
+      }
     } catch (error) {
       console.log("Error in submitting form");
       console.error(error);

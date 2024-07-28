@@ -10,9 +10,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useNavigate } from "react-router-dom";
 
 function Navbar() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
 
   return (
     <>
@@ -65,7 +67,7 @@ function Navbar() {
               </DropdownMenu>
             </div>
           ) : (
-            <Button onClick={() => setIsLoggedIn(true)}>Login</Button>
+            <Button onClick={() => navigate("/login")}>Login</Button>
           )}
         </div>
       </nav>
