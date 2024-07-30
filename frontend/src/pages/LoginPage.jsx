@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import axios from "axios";
+// import { loginUser } from "@/store/userSlice";
+import { loginUser } from "../store/userSlice";
 import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 function LoginPage() {
@@ -12,43 +14,36 @@ function LoginPage() {
 
   const { toast } = useToast();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { status, error } = useSelector((state) => state.user);
 
   const submitForm = async (e) => {
+    e.preventDefault();
+    console.log("- - - - - - - - - - ");
+    console.log("Started submitForm() in LoginPage.jsx");
     try {
-      e.preventDefault();
-      const { data } = await axios.post("/users/login", { email, password });
+      console.log("Trying to dispatch action");
+      const resultAction = await dispatch(
+        loginUser({ email, password }),
+      ).unwrap();
+      console.log("Result: ", resultAction);
       toast({
-        description: data.message,
+        description: resultAction.message,
       });
 
-      if (data.success) {
-        
+      if (resultAction.success) {
         setTimeout(() => {
           navigate("/");
         }, 3000);
       }
     } catch (error) {
-      console.log("Error occured in submitForm() in LoginPage.jsx");
+      console.log("Error occurred in submitForm() in LoginPage.jsx");
       console.error(error);
-
-      // error handling
-      if (error.response) {
-        toast({
-          description: error.response.data.message,
-          variant: "destructive",
-        });
-      } else if (error.request) {
-        console.error("No response received from server: ", error.request);
-        toast({
-          description: "No response from server. Please try again later",
-          variant: "destructive",
-        });
-      } else {
-        toast({
-          description: "An unexpected error occured. Please try again later",
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: "Error",
+        description: error.message || "An unknown error occured",
+        variant: "destructive",
+      });
     }
   };
 

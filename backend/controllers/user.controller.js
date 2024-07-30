@@ -74,14 +74,11 @@ const loginUser = async (req, res) => {
               // removing password before sending user details
               const userWithoutPassword = doc.toObject();
               delete userWithoutPassword.password;
-              res
-                .status(200)
-                .cookie("token", token)
-                .json({
-                  success: true,
-                  message: "Login Successfull",
-                  userDetails: userWithoutPassword,
-                });
+              res.status(200).cookie("token", token).json({
+                success: true,
+                message: "Login Successfull",
+                userDetails: userWithoutPassword,
+              });
             }
           );
         } else {
@@ -112,4 +109,35 @@ const loginUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, loginUser };
+const getUserFromToken = async (req, res) => {
+  console.log("- - - - - - - - - - ");
+  console.log("Started getUserFromToken() in user.controller.js");
+  try {
+    console.log("Checking for cookies");
+    const token = req.cookies["token"];
+    if (!token) {
+      console.log("No cookie found");
+      res
+        .status(400)
+        .json({ success: false, message: "No authentication token found!" });
+    } else {
+      console.log("Token found");
+      jwt.verify(token, jwtSecret, {}, async (err, tokenData) => {
+        if (err) {
+          console.log("Error in token verification: ", err);
+          return res.status(401).json({ message: "Token verification failed" });
+        }
+        console.log("Token verified successfully; ", tokenData);
+        const user = await Users.findById(tokenData._id);
+        console.log("User document retrieved from DB: ", user);
+        res.status(200).json({ message: "Token verified", user });
+      });
+    }
+  } catch (error) {
+    console.log("Error occured in getUserFromToken() in user.controller.js");
+    console.error(error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+};
+
+module.exports = { createUser, loginUser, getUserFromToken };
