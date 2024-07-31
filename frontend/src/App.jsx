@@ -6,11 +6,12 @@ import LayoutPage from "./pages/LayoutPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import axios from "axios";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchUserFromTokenThunk } from "./store/userSlice";
 
 function App() {
   const dispatch = useDispatch();
+  const { status } = useSelector((state) => state.user);
 
   axios.defaults.baseURL = "http://localhost:7878/";
   axios.defaults.withCredentials = true;
@@ -29,6 +30,10 @@ function App() {
   useEffect(() => {
     fetchUserFromToken();
   }, [dispatch]);
+
+  if (status === "fetching") {
+    return null;
+  }
 
   return (
     <>
