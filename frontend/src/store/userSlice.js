@@ -29,14 +29,43 @@ export const loginUser = createAsyncThunk(
   },
 );
 
+export const logout = createAsyncThunk(
+  "user/logout",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete("users/token");
+      return response.data;
+    } catch (error) {
+      console.log("Error in logout thunk");
+      console.error(error);
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      } else if (error.request) {
+        return rejectWithValue({ message: "No response from server" });
+      } else {
+        return rejectWithValue({
+          message: error.message || "An unknown error occured",
+        });
+      }
+    }
+  },
+);
+
 export const fetchUserFromTokenThunk = createAsyncThunk(
   "user/fetchUser",
-  async () => {
+  async (_, { rejectWithValue }) => {
     try {
       const response = await axios.get("/users/user");
       return response.data;
     } catch (error) {
       console.log(error);
+      if (error.response) {
+        return rejectWithValue(error.response.data);
+      } else if (error.request) {
+        return rejectWithValue({ message: "No response from server" });
+      } else {
+        return rejectWithValue({ message: error.message || "Unknow error" });
+      }
     }
   },
 );
@@ -44,13 +73,7 @@ export const fetchUserFromTokenThunk = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState,
-  reducers: {
-    logout: (state) => {
-      state.userDetails = null;
-      state.status = "idle";
-      state.error = null;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(loginUser.pending, (state) => {
@@ -66,16 +89,33 @@ export const userSlice = createSlice({
         state.status = "failed";
         state.error = action.payload.message || "An error occured";
       })
-      .addCase(fetchUserFromTokenThunk.fulfilled, (state, action) => {
-        state.status = "fulfilled";
-        state.userDetails = action.payload.user;
+      .addCase(fetchUserFromTokenThunk.pending, (state) => {
+        state.status = "fetching";
+        state.error = null;
       })
-      .addCase(fetchUserFromTokenThunk.rejected, (state) => {
+      .addCase(fetchUserFromTokenThunk.fulfilled, (state, action) => {
+        state.status = "idle";
+        state.userDetails = action.payload.user;
+        state.error = null;
+      })
+      .addCase(fetchUserFromTokenThunk.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload.message;
+      })
+      .addCase(logout.pending, (state) => {
+        state.status = "logging out user";
+        state.error = null;
+      })
+      .addCase(logout.fulfilled, (state) => {
+        state.status = "idle";
         state.userDetails = null;
+        state.error = null;
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.payload;
       });
   },
 });
-
-export const { logout } = userSlice.actions;
 
 export default userSlice.reducer;

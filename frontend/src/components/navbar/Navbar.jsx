@@ -12,13 +12,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { logout } from "../../store/userSlice";
+import { useToast } from "../ui/use-toast";
 
 function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { toast } = useToast();
 
   const dispatch = useDispatch();
   const { userDetails } = useSelector((state) => state.user);
   const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const resultAction = await dispatch(logout()).unwrap();
+      toast({
+        description: resultAction.message,
+      });
+    } catch (error) {
+      console.log("Error in logout() in Navbar.jsx");
+      console.error(error);
+      toast({
+        title: "Error",
+        description: error.message || "An unknown error occured",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <>
@@ -60,10 +79,7 @@ function Navbar() {
                     </Button>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Button
-                      onClick={() => setIsLoggedIn(false)}
-                      variant="destructive"
-                    >
+                    <Button onClick={handleLogout} variant="destructive">
                       Logout
                     </Button>
                   </DropdownMenuItem>

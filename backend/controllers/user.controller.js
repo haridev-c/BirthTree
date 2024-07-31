@@ -74,7 +74,7 @@ const loginUser = async (req, res) => {
               // removing password before sending user details
               const userWithoutPassword = doc.toObject();
               delete userWithoutPassword.password;
-              res.status(200).cookie("token", token).json({
+              res.status(200).cookie("token", token, { httpOnly: true }).json({
                 success: true,
                 message: "Login Successfull",
                 userDetails: userWithoutPassword,
@@ -127,9 +127,9 @@ const getUserFromToken = async (req, res) => {
           console.log("Error in token verification: ", err);
           return res.status(401).json({ message: "Token verification failed" });
         }
-        console.log("Token verified successfully; ", tokenData);
+        console.log("Token verified successfully; ");
         const user = await Users.findById(tokenData._id);
-        console.log("User document retrieved from DB: ", user);
+        console.log("User document retrieved from DB");
         res.status(200).json({ message: "Token verified", user });
       });
     }
@@ -140,4 +140,17 @@ const getUserFromToken = async (req, res) => {
   }
 };
 
-module.exports = { createUser, loginUser, getUserFromToken };
+const logoutUser = async (req, res) => {
+  console.log("- - - - - - - - - - ");
+  console.log("Started logoutUser() in user.controller.js");
+  try {
+    res.clearCookie("token");
+    return res.status(200).json({ message: "Logged out successfully" });
+  } catch (error) {
+    console.log("Error in logout() in user.controller.js");
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = { createUser, loginUser, getUserFromToken, logoutUser };

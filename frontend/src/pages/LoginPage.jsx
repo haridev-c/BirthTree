@@ -26,16 +26,11 @@ function LoginPage() {
       const resultAction = await dispatch(
         loginUser({ email, password }),
       ).unwrap();
-      console.log("Result: ", resultAction);
       toast({
         description: resultAction.message,
       });
 
-      if (resultAction.success) {
-        setTimeout(() => {
-          navigate("/");
-        }, 3000);
-      }
+      navigate("/");
     } catch (error) {
       console.log("Error occurred in submitForm() in LoginPage.jsx");
       console.error(error);
