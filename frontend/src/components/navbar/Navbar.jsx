@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import BrandIcon from "../../assets/icons8-birthday-16.png";
 
+import { Menu } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -42,10 +44,29 @@ function Navbar() {
   return (
     <>
       <nav className="flex h-14 w-full items-center rounded border border-black px-4">
-        <div id="BrandDetails" className="mx-4 flex-grow">
-          BirthTree
+        <div id="mobileMenu" className="md:hidden">
+          <Menu />
         </div>
-        <div id="userDetails" className="">
+
+        <div
+          id="BrandDetails"
+          className="flex flex-grow justify-center md:mx-4 md:flex-grow-0"
+        >
+          <Link className="flex items-center justify-center" to={"/"}>
+            <img
+              src={BrandIcon}
+              alt=""
+              className="mx-2 size-fit overflow-hidden"
+            />
+            <span className="md:mr-10">BirthTree</span>
+          </Link>
+        </div>
+
+        <div className="hidden md:flex md:flex-grow">
+          <span className="mx-2">Home</span>
+          <span>About</span>
+        </div>
+        <div id="userDetails" className="flex">
           {userDetails ? (
             <div>
               <DropdownMenu>
