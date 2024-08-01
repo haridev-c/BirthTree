@@ -12,6 +12,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/userSlice";
@@ -45,7 +54,20 @@ function Navbar() {
     <>
       <nav className="flex h-14 w-full items-center rounded border border-black px-4">
         <div id="mobileMenu" className="md:hidden">
-          <Menu />
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <SheetTitle className="text-2xl">Pages</SheetTitle>
+              <SheetDescription className="mt-10">
+                <span className="my-6 block text-xl">Home</span>
+                <span className="my-6 block text-xl">About</span>
+              </SheetDescription>
+            </SheetContent>
+          </Sheet>
         </div>
 
         <div
