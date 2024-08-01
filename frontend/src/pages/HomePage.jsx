@@ -1,3 +1,4 @@
+import Leaderboard from "@/components/leaderboard/Leaderboard";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -10,6 +11,7 @@ function HomePage() {
       <main>
         <div>HomePage</div>
         <p>Welcome </p>
+        <Leaderboard />
       </main>
     </>
   );

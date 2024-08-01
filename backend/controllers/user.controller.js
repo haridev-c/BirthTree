@@ -153,4 +153,31 @@ const logoutUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, loginUser, getUserFromToken, logoutUser };
+const getAllUsers = async (req, res) => {
+  console.log("- - - - - - - - - - ");
+  console.log("Started getAllUsers() in user.controller.js");
+  try {
+    const allUsers = await Users.find();
+    if (!allUsers) {
+      console.log("No users found; sending empty response");
+      return res
+        .status(200)
+        .json({ message: "No users in databse", allUsers: null });
+    } else {
+      console.log("Users found; sending successful response");
+      return res.status(200).json({ message: "Users found", allUsers });
+    }
+  } catch (error) {
+    console.log("Error in getAllUsers() in user.controller.js");
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+module.exports = {
+  createUser,
+  loginUser,
+  getUserFromToken,
+  logoutUser,
+  getAllUsers,
+};
