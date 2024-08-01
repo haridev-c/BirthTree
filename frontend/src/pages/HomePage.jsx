@@ -9,8 +9,7 @@ function HomePage() {
   return (
     <>
       <main>
-        <div>HomePage</div>
-        <p>Welcome </p>
+        <p className="my-8 text-center text-4xl">Welcome to BirthTree </p>
         <Leaderboard />
       </main>
     </>

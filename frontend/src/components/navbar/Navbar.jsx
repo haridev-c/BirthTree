@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../store/userSlice";
 import { useToast } from "../ui/use-toast";
@@ -74,8 +74,8 @@ function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent className="flex flex-col px-3 pb-2">
                   <DropdownMenuItem asChild>
-                    <Button variant="outline" className="my-2">
-                      Profile
+                    <Button asChild variant="outline" className="my-2">
+                      <Link to={"/profile"}>Profile</Link>
                     </Button>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>

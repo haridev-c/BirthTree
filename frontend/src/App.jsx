@@ -8,6 +8,7 @@ import SignupPage from "./pages/SignupPage";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUserFromTokenThunk } from "./store/userSlice";
+import MyProfilePage from "./pages/MyProfilePage";
 
 function App() {
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ function App() {
           <Route index element={<HomePage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/signup" element={<SignupPage />} />
+          <Route path="/profile" element={<MyProfilePage />} />
         </Route>
       </Routes>
     </>
